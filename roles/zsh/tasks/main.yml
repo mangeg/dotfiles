@@ -1,0 +1,13 @@
+- name: Make sure zsh is installed
+  apt: name=zsh state=present
+  become_method: sudo
+
+- name: Symlink .zshrc
+  file:
+    src: "{{ dotfiles_home }}/roles/zsh/files/zshrc"
+    dest: "{{dotfiles_user_home}}/.zshrc"
+    state: link
+
+- name: Clone oh-my-zsh repo
+  git: repo=https://github.com/robbyrussell/oh-my-zsh.git dest=~/.oh-my-zsh
+  become: no
