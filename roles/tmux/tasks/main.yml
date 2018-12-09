@@ -7,3 +7,9 @@
     src: "{{ dotfiles_home }}/roles/tmux/files/tmux.conf"
     dest: "{{dotfiles_user_home}}/.tmux.conf"
     state: link
+
+- name: Install tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: "{{dotfiles_user_home}}/.tmux/plugins/tpm"
+

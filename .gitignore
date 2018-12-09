@@ -1,2 +1,4 @@
 *.retry
+*.swp
 .tmux/plugins/**
+**/vim/bundles/**

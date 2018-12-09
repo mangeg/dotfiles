@@ -10,3 +10,4 @@
   roles:
     - {role: tmux, tags: ['tmux']}
     - {role: zsh, tags: ['zsh']}
+    - {role: vim, tags: ['vim']}
