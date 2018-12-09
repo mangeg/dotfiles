@@ -10,3 +10,5 @@
     dest: "{{ dotfiles_user_home }}/.vim"
     state: link
 
+- name: Install plugins
+  shell: vim +'PlugInstall --sync' +qa
