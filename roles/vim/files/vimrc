@@ -1,7 +1,53 @@
+set nocompatible
+
 " Plugins
 call plug#begin('~/.vim/bundles')
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'editorconfig/editorconfig-vim'
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'patstockwell/vim-monokai-tasty'
+Plug 'flazz/vim-colorschemes'
 
 " Initialize plugin system
 call plug#end()
+
+set laststatus=2
+
+colorscheme molokai_dark
+
+let mapleader = ' '
+
+	" Change mapped keys for pane switching
+	map <C-j> <C-W>j
+	map <C-k> <C-W>k
+	map <C-h> <C-W>h
+	map <C-l> <C-W>l
+
+	" save with ctrl+s
+	nmap <c-s> :w<CR>
+	imap <c-s> <Esc>:w<CR>a
+
+	" Toggle NERDTree
+	map <leader>n :NERDTreeToggle<CR>
+
+	" Re-source
+	map <leader>z :source ~/.vimrc<CR>
+
+	" Show hidden characters
+"	set list
+"	set tabpagemax=15               " Only show 15 tabs
+	set showmode                    " Display the current mode
+
+	set cursorline                  " Highlight current line
+
+	set backspace=indent,eol,start  " Backspace for dummies
+	set linespace=0                 " No extra spaces between rows
+	set number                      " Line numbers on
+
+	filetype plugin indent on       " Automatically detect file types.
+	syntax on                       " Syntax highlighting
+
+	

@@ -104,3 +104,5 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=240"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
