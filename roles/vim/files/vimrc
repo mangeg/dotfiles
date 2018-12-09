@@ -1,0 +1,7 @@
+" Plugins
+call plug#begin('~/.vim/bundles')
+
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+" Initialize plugin system
+call plug#end()

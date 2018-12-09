@@ -1,0 +1,12 @@
+- name: Symlink .vimrc
+  file:
+    src: "{{ dotfiles_home }}/roles/vim/files/vimrc"
+    dest: "{{dotfiles_user_home}}/.vimrc"
+    state: link
+
+- name: Symlink .vim
+  file:
+    src: "{{ dotfiles_home }}/roles/vim/files/vim"
+    dest: "{{ dotfiles_user_home }}/.vim"
+    state: link
+
