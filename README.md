@@ -10,3 +10,7 @@ git clone https://github.com/mangeg/dotfiles.git ~/.dotfiles
 ```
 vim +'PlugInstall --sync' +qa
 ```
+
+```
+chsh -s /bin/zsh $USER
+```
