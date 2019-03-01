@@ -11,6 +11,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'patstockwell/vim-monokai-tasty'
 Plug 'flazz/vim-colorschemes'
+"Plug 'godlygeek/tabular'
+"Plug 'plasticboy/vim-markdown'
 
 " Initialize plugin system
 call plug#end()
