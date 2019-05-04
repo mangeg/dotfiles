@@ -12,3 +12,15 @@
   git: repo=https://github.com/robbyrussell/oh-my-zsh.git dest=~/.oh-my-zsh
   become: no
 
+- name: zsh-256color
+  git: repo=https://github.com/chrissicool/zsh-256color dest=~/.oh-my-zsh/custom/plugins/zsh-256color
+  become: no
+
+- name: zsh-autosuggestions
+  git: repo=https://github.com/zsh-users/zsh-autosuggestions dest=~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+  become: no
+
+- name: zsh-syntax-highlighting
+  git: repo=https://github.com/zsh-users/zsh-syntax-highlighting dest=~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  become: no
+
