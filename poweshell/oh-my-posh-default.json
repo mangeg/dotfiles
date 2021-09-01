@@ -1,0 +1,128 @@
+{
+    "final_space": true,
+    "console_title": true,
+    "console_title_style": "folder",
+    "blocks": [
+        {
+            "type": "prompt",
+            "alignment": "right",
+            "vertical_offset": -1,
+            "segments": [
+                {
+                    "type": "executiontime",
+                    "style": "plain",
+                    "foreground": "#ffffff",
+                    "background": "#83769c",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "always_enabled": true,
+                        "prefix": "<transparent></> \ufa1e"
+                    }
+                },
+                {
+                    "type": "time",
+                    "style": "plain",
+                    "foreground": "#007ACC",
+                    "properties": {
+                        "time_format": "15:04",
+                        "prefix": "[",
+                        "postfix": "]"
+                    }
+                },
+                {
+                    "type": "spotify",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#ffffff",
+                    "background": "#1BD760",
+                    "properties": {
+                        "prefix": "\uF9C6 ",
+                        "playing_icon": "\uE602 ",
+                        "paused_icon": "\uF8E3 ",
+                        "stopped_icon": "\uF04D ",
+                        "track_separator": " - "
+                    }
+                }
+            ]
+        },
+        {
+            "type": "prompt",
+            "newline": true,
+            "alignment": "left",
+            "segments": [
+                {
+                    "type": "path",
+                    "style": "diamond",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#ffffff",
+                    "background": "#ff479c",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "prefix": " ",
+                        "style": "mixed",
+                        "mixed_threshold": 6,
+                        "enable_hyperlink": true
+                    }
+                },
+                {
+                    "type": "az",
+                    "style": "powerline",
+                    "powerline_symbol": "\uE0B0",
+                    "foreground": "#000000",
+                    "background": "#9ec3f0",
+                    "properties": {
+                        "display_account": false,
+                        "display_id": false,
+                        "display_name": true,
+                        "info_separator": " @ ",
+                        "prefix": " \uFD03 "
+                    }
+                },
+                {
+                    "type": "dotnet",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#ffffff",
+                    "background": "#6CA35E",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "display_version": true,
+                        "prefix": "  "
+                    }
+                },
+                {
+                    "type": "git",
+                    "style": "powerline",
+                    "powerline_symbol": "",
+                    "invert_powerline": false,
+                    "foreground": "#193549",
+                    "background": "#fffb38",
+                    "leading_diamond": "",
+                    "trailing_diamond": "",
+                    "properties": {
+                        "display_status": true,
+                        "display_status_detail": true,
+                        "display_stash_count": true,
+                        "display_upstream_icon": true,
+                        "status_colors_enabled": false,
+                        "local_changes_color": "ff479c",
+                        "color_background": true,
+                        "ahead_and_behind_color": "#ff479c",
+                        "working_color": "#F0000F",
+                        "staging_color": "#0000FF"
+                    }
+                },
+                {
+                    "type": "root",
+                    "style": "plain",
+                    "foreground": "#ffff66"
+                }
+            ]
+        }
+    ]
+}
