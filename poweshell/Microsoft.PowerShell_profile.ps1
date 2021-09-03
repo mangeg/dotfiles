@@ -2,10 +2,14 @@ using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
 
 [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+$env:LC_ALL='C.UTF-8'
 
 oh-my-posh --init --shell pwsh --config "D:\Dev\Repos\dotfiles\poweshell\oh-my-posh-default.json" | Invoke-Expression
 
 Import-Module -Name Terminal-Icons
+
+New-Alias g git
+Import-Module posh-git
 
 New-Alias which get-command
 
