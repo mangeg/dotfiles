@@ -43,7 +43,7 @@
                     "properties": {
                         "style": "mixed",
                         "prefix": "<#7a7a7a></> <#f2f200></> ",
-                        "mixed_threshold": 6,
+                        "mixed_threshold": 10,
                         "enable_hyperlink": false
                     }
                 },
