@@ -1,0 +1,45 @@
+[user]
+	name = Magnus Gideryd
+	email = magnus.gideryd@visma.com
+
+[alias]
+	abort = rebase --abort
+    aliases = "!git config -l | grep alias | cut -c 7-"
+	browse = !git open
+	churn = !git --no-pager log --name-only --oneline | grep -v ' ' | sort | uniq -c | sort -nr | head
+	lga = "!f() { git log --graph --oneline --all --date-order --decorate -n ${1-25};};f"
+	lgap = "!f() { git log --date-order --pretty=format:\"%C(auto)%h %d %s %Cgreen %aN\" --graph --all -n ${1-25};};f"
+	lg = "log -n 30 --graph --color --all --date-order --pretty=format:'%C(yellow)%h%Creset |%C(auto)%d%Creset %s (%Cgreen%cr%Creset) [%C(bold cyan)%aN%Creset]' --abbrev-commit"
+	lgt = "forest --pretty=format:'%C(red)%h %C(magenta)(%ar) %C(blue)%an %C(reset)%s' --style=15 --reverse"
+	lgs = "log --graph --date-order --pretty='%C(yellow)%h%Creset |%C(auto)%d%Creset %s (%Cgreen%ar%Creset) [%C(cyan)%aN%Creset]'"
+	st = status --short --branch
+	dp = diff --word-diff --unified=5
+	c = config --global -e
+	p = pull --all --ff-only
+	amendn = commit --amend --no-edit
+	am = "commit -a --amend --no-edit && git push --force-with-lease"
+	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+	graphviz = "!f() { echo 'digraph git {' ; git log --pretty='format:  %h -> { %p }' \"$@\" | sed 's/[0-9a-f][0-9a-f]*/\"&\"/g' ; echo '}'; }; f"
+	open = "!f(){ URL=$(git config remote.origin.url); open ${URL%.git}; }; f"
+[core]
+	editor = \"code\" --wait
+	pager = less -RFX
+[diff]
+	algorithm = histogram    
+[fetch]
+	prune = true
+[rebase]
+	autostash = true
+[rerere]
+	enabled = true
+[color]
+        diff = auto
+        status = auto
+        branch = auto
+        ui = true
+[push]
+        # See `git help config` (search for push.default)
+        # for more information on different options of the below setting.
+        #
+        # Setting to git 2.0 default to suppress warning message
+        default = simple
