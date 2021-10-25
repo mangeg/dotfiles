@@ -121,10 +121,10 @@
                     "type": "text",
                     "style": "diamond",
                     "trailing_diamond": "",
-                    "foreground": "#fafafa",
+                    "foreground": "#3f3f3f",
                     "background": "#3f3f3f",
                     "properties": {
-                        "text": "",
+                        "text": " ",
                         "postfix": "",
                         "prefix": ""
                     }
@@ -142,7 +142,7 @@
                     "foreground": "#3f3f3f",
                     "background": "#3f3f3f",
                     "properties": {
-                        "text": "",
+                        "text": " ",
                         "prefix": "",
                         "postfix": " "
                     }
