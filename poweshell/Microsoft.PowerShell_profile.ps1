@@ -6,6 +6,7 @@ $env:LC_ALL='C.UTF-8'
 
 oh-my-posh --init --shell pwsh --config "D:\Dev\Repos\dotfiles\poweshell\oh-my-posh-default.json" | Invoke-Expression
 
+Import-Module -Name PSReadLine
 Import-Module -Name Terminal-Icons
 
 New-Alias g git
@@ -20,11 +21,12 @@ New-Alias d docker
 New-Alias dc docker-compose
 New-Alias t terraform
 
-Import-Module PSReadLine
 Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -EditMode Windows
 
+Set-PSReadLineKeyHandler -Key Ctrl+UpArrow -Function PreviousHistory
+Set-PSReadLineKeyHandler -Key Ctrl+DownArrow -Function NextHistory
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
