@@ -1,0 +1,200 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "version": 2,
+  "final_space": true,
+  "console_title_template": "{{if .Root}}root :: {{end}}{{.Folder}}",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "diamond",
+          "foreground": "#26C6DA",
+          "background": "#3f3f3f",
+          "leading_diamond": "\ue0b6",
+          "template": " {{ if .WSL }}WSL at {{ end }}{{.Icon}} ",
+          "properties": {
+            "alpine": "\uf300",
+            "arch": "\uf303",
+            "centos": "\uf304",
+            "debian": "\uf306",
+            "elementary": "\uf309",
+            "fedora": "\uf30a",
+            "gentoo": "\uf30d",
+            "linux": "\ue712",
+            "macos": "\ue711",
+            "manjaro": "\uf312",
+            "mint": "\uf30f",
+            "opensuse": "\uf314",
+            "raspbian": "\uf315",
+            "ubuntu": "\uf31c",
+            "windows": "\ue70f",
+            "wsl": "\ue712",
+            "wsl_separator": " on "
+          }
+        },
+        {
+          "type": "path",
+          "style": "diamond",
+          "foreground": "#34b6dc",
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> <#f2f200>\ue613</> {{ .Path }} ",
+          "properties": {
+            "mixed_threshold": 10,
+            "style": "mixed"
+          }
+        },
+        {
+          "type": "az",
+          "style": "diamond",
+          "foreground": "#b1b1e2",
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> \ue246 {{ .Name }} ",
+          "properties": {
+            "display_account": false,
+            "display_id": false,
+            "display_name": true,
+            "include_folders": [
+              "unknown"
+            ],
+            "info_separator": " @ "
+          }
+        },
+        {
+          "type": "dotnet",
+          "style": "diamond",
+          "foreground": "#6CA35E",
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> <b>\ue70c</b> {{ if .Unsupported }}\uf071{{ else }}{{ .Full }}{{ end }} ",
+          "properties": {
+            "fetch_version": true
+          }
+        },
+        {
+          "type": "terraform",
+          "style": "diamond",
+          "foreground": "#ebcc34",
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> \ue720 {{ .WorkspaceName }}{{ if .Version }} {{ .Version }}{{ end }} "
+        },
+        {
+          "type": "git",
+          "style": "diamond",
+          "foreground": "#12b016",
+          "foreground_templates": [
+            "{{ if or (.Working.Changed) (.Staging.Changed) }}#e8e652{{ end }}",
+            "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#42dcd7{{ end }}",
+            "{{ if gt .Ahead 0 }}#a46630{{ end }}",
+            "{{ if gt .Behind 0 }}#bd43b3{{ end }}"
+          ],
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 <#787ada>{{ .Working.String }}</>{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 <#00ffff>{{ .Staging.String }}</>{{ end }} ",
+          "properties": {
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true
+          }
+        },
+        {
+          "type": "kubectl",
+          "style": "diamond",
+          "foreground": "#ebcc34",
+          "background": "#3f3f3f",
+          "template": "<#7a7a7a>\ue0b1</> \ufd31 {{.Context}} :: {{if .Namespace}}{{.Namespace}}{{else}}default{{end}} ",
+          "properties": {
+            "include_folders": [
+              "unknown"
+            ]
+          }
+        },
+        {
+          "type": "text",
+          "style": "diamond",
+          "foreground": "#3f3f3f",
+          "background": "#3f3f3f",
+          "trailing_diamond": "\ue0b0"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "text",
+          "style": "diamond",
+          "foreground": "#3f3f3f",
+          "background": "#3f3f3f",
+          "leading_diamond": "\ue0b2",
+          "template": " "
+        },
+        {
+          "type": "executiontime",
+          "style": "diamond",
+          "foreground": "#83769c",
+          "background": "#3f3f3f",
+          "template": "\ufa1e{{ .FormattedMs }}\u2800<#7a7a7a>\ue0b3</> ",
+          "properties": {
+            "always_enabled": false,
+            "style": "roundrock",
+            "threshold": 100
+          }
+        },
+        {
+          "type": "root",
+          "style": "diamond",
+          "foreground": "#ff8080",
+          "background": "#3f3f3f",
+          "template": "\uf0e7 <#7a7a7a>\ue0b3</> ",
+          "properties": {
+            "root_icon": "\uf0e7"
+          }
+        },
+        {
+          "type": "time",
+          "style": "diamond",
+          "foreground": "#689f38",
+          "background": "#3f3f3f",
+          "template": "<#007ACC>\uf64f</> {{ .CurrentDate | date .Format }}",
+          "properties": {
+            "time_format": "15:04:05"
+          }
+        },
+        {
+          "type": "text",
+          "style": "diamond",
+          "foreground": "#3f3f3f",
+          "background": "#3f3f3f",
+          "trailing_diamond": "\ue0b4"
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "exit",
+          "style": "plain",
+          "foreground": "#ffffff",
+          "foreground_templates": [
+            "{{ if gt .Code 0 }}#f1184c{{ end }}"
+          ],
+          "template": "\ue231{{ if gt .Code 0 }}\uf00d{{ else }}\uf42e{{ end }} ",
+          "properties": {
+            "always_enabled": false
+          }
+        },
+        {
+          "type": "text",
+          "style": "plain",
+          "foreground": "#269024",
+          "template": "\uf101 "
+        }
+      ],
+      "newline": true
+    }
+  ]
+}

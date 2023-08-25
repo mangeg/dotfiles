@@ -1,40 +1,69 @@
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
 
-[console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
+[console]::InputEncoding = [console]::OutputEncoding = [Text.Encoding]::UTF8
 $env:LC_ALL='C.UTF-8'
 
-oh-my-posh --init --shell pwsh --config "D:\Dev\Repos\dotfiles\poweshell\oh-my-posh-default.json" | Invoke-Expression
+if (-not (Test-Path Env:\OMP_THEME)) {
+    Write-Error "OMP_THEME environment variable does not exist."
+    Write-Error "Configure OMP_THEME to a valid oh-my-posh theme file."
+    return;
+}
+
+$env:POSH_GIT_ENABLED = $true
+oh-my-posh --init --shell pwsh --config $env:OMP_THEME | Invoke-Expression
 
 Import-Module -Name PSReadLine
 Import-Module -Name Terminal-Icons
+Import-Module -Name CompletionPredictor
+Import-Module -Name posh-git
 
-New-Alias g git
-Import-Module posh-git
 
-New-Alias which get-command
-
-New-Alias e explorer
-
-New-Alias k kubectl
-New-Alias d docker
-New-Alias dc docker-compose
-New-Alias t terraform
-
-Set-PSReadLineOption -PredictionSource History
+# PS ReadLine config
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
-Set-PSReadLineOption -EditMode Windows
 
 Set-PSReadLineKeyHandler -Key Ctrl+UpArrow -Function PreviousHistory
 Set-PSReadLineKeyHandler -Key Ctrl+DownArrow -Function NextHistory
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 
+# Aliases
+New-Alias which get-command
+New-Alias g git
+New-Alias e explorer
+New-Alias k kubectl
+New-Alias d docker
+New-Alias t terraform
+
+# Windows Terminal
+## Split horizontal
+Set-PSReadLineKeyHandler -Key Ctrl+Alt+s `
+                         -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("wt -w 0 sp -d .")
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()                       
+}
+## Split vertical
+Set-PSReadLineKeyHandler -Key Ctrl+Alt+Shift+s `
+                         -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("wt -w 0 sp -H -d .")
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()                       
+}
+## Split 
+Set-PSReadLineKeyHandler -Key Ctrl+shift+s `
+                         -ScriptBlock {
+    [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("wt -w 0 nt -d .")
+    [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()                       
+}
+
 # CaptureScreen is good for blog posts or email showing a transaction
 # of what you did when asking for help or demonstrating a technique.
 Set-PSReadLineKeyHandler -Chord 'Ctrl+d,Ctrl+c' -Function CaptureScreen
 
-
+# Dev
 Set-PSReadLineKeyHandler -Key Ctrl+Shift+b `
                          -BriefDescription BuildCurrentDirectory `
                          -LongDescription "Build the current directory" `
@@ -62,70 +91,37 @@ Set-PSReadLineKeyHandler -Key Ctrl+Alt+c `
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
 
-# This key handler shows the entire or filtered history using Out-GridView. The
-# typed text is used as the substring pattern for filtering. A selected command
-# is inserted to the command line without invoking. Multiple command selection
-# is supported, e.g. selected by Ctrl + Click.
-Set-PSReadLineKeyHandler -Key F7 `
-                         -BriefDescription History `
-                         -LongDescription 'Show command history' `
-                         -ScriptBlock {
-    $pattern = $null
-    [Microsoft.PowerShell.PSConsoleReadLine]::GetBufferState([ref]$pattern, [ref]$null)
-    if ($pattern)
-    {
-        $pattern = [regex]::Escape($pattern)
-    }
-
-    $history = [System.Collections.ArrayList]@(
-        $last = ''
-        $lines = ''
-        foreach ($line in [System.IO.File]::ReadLines((Get-PSReadLineOption).HistorySavePath))
-        {
-            if ($line.EndsWith('`'))
-            {
-                $line = $line.Substring(0, $line.Length - 1)
-                $lines = if ($lines)
-                {
-                    "$lines`n$line"
-                }
-                else
-                {
-                    $line
-                }
-                continue
-            }
-
-            if ($lines)
-            {
-                $line = "$lines`n$line"
-                $lines = ''
-            }
-
-            if (($line -cne $last) -and (!$pattern -or ($line -match $pattern)))
-            {
-                $last = $line
-                $line
-            }
-        }
-    )
-    $history.Reverse()
-
-    $command = $history | Out-GridView -Title History -PassThru
-    if ($command)
-    {
-        [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-        [Microsoft.PowerShell.PSConsoleReadLine]::Insert(($command -join "`n"))
-    }
-}
-
-# PowerShell parameter completion shim for the dotnet CLI 
+## PowerShell parameter completion shim for the dotnet CLI
 Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
-    param($commandName, $wordToComplete, $cursorPosition)
-    dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    }
+     param($commandName, $wordToComplete, $cursorPosition)
+         dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+         }
+ }
+
+ ## dotnet suggest shell start
+if (Get-Command "dotnet-suggest" -errorAction SilentlyContinue)
+{
+    $availableToComplete = (dotnet-suggest list) | Out-String
+    $availableToCompleteArray = $availableToComplete.Split([Environment]::NewLine, [System.StringSplitOptions]::RemoveEmptyEntries)
+
+    Register-ArgumentCompleter -Native -CommandName $availableToCompleteArray -ScriptBlock {
+        param($wordToComplete, $commandAst, $cursorPosition)
+        $fullpath = (Get-Command $commandAst.CommandElements[0]).Source
+
+        $arguments = $commandAst.Extent.ToString().Replace('"', '\"')
+        dotnet-suggest get -e $fullpath --position $cursorPosition -- "$arguments" | ForEach-Object {
+            [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
+        }
+    }    
 }
+else
+{
+    "Unable to provide System.CommandLine tab completion support unless the [dotnet-suggest] tool is first installed."
+    "See the following for tool installation: https://www.nuget.org/packages/dotnet-suggest"
+}
+
+$env:DOTNET_SUGGEST_SCRIPT_VERSION = "1.0.2"
 
 # PowerShell parameter completion shim for winget CLI
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
@@ -464,11 +460,8 @@ Set-PSReadLineKeyHandler -Key "Alt+%" `
     }
 }
 
-
-#endregion Smart Insert/Delete
-
 # Insert text from the clipboard as a here string
-Set-PSReadLineKeyHandler -Key Ctrl+V `
+Set-PSReadLineKeyHandler -Key Ctrl+Shift+v `
                          -BriefDescription PasteAsHereString `
                          -LongDescription "Paste the clipboard text as a here string" `
                          -ScriptBlock {
@@ -533,96 +526,6 @@ Set-PSReadLineKeyHandler -Key Alt+j `
     [Microsoft.PowerShell.PSConsoleReadLine]::InvokePrompt()
 }
 
-# Auto correct 'git cmt' to 'git commit'
-Set-PSReadLineOption -CommandValidationHandler {
-    param([CommandAst]$CommandAst)
-
-    switch ($CommandAst.GetCommandName())
-    {
-        'git' {
-            $gitCmd = $CommandAst.CommandElements[1].Extent
-            switch ($gitCmd.Text)
-            {
-                'cmt' {
-                    [Microsoft.PowerShell.PSConsoleReadLine]::Replace(
-                        $gitCmd.StartOffset, $gitCmd.EndOffset - $gitCmd.StartOffset, 'commit')
-                }
-            }
-        }
-    }
-}
-
-<#
-# PowerShell parameter completion shim for the dotnet CLI 
-Register-ArgumentCompleter -Native -CommandName dotnet -ScriptBlock {
-    param($commandName, $wordToComplete, $cursorPosition)
-    dotnet complete --position $cursorPosition "$wordToComplete" | ForEach-Object {
-        [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)
-    }
-}
-
-Import-Module posh-git
-Import-Module oh-my-posh
-Set-Theme Paradox
-
-Set-PSReadlineKeyHandler -Key Tab -Function Complete
-Set-PSReadLineOption -BellStyle None
-
-function Get-TerraformDirectory {
-    $pathInfo = Microsoft.PowerShell.Management\Get-Location
-    if (!$pathInfo -or ($pathInfo.Provider.Name -ne 'FileSystem')) {
-        $null
-    }
-    else {
-        $currentDir = Get-Item -LiteralPath $pathInfo -Force
-        while ($currentDir) {
-            $gitDirPath = Join-Path $currentDir.FullName .terraform
-            if (Test-Path -LiteralPath $gitDirPath -PathType Container) {
-                return $gitDirPath
-            }
-
-            $currentDir = $currentDir.Parent
-        }
-    }
-}
-
-[ScriptBlock]$oldPrompt = (Get-Item -Path Function:prompt).ScriptBlock
-[ScriptBlock]$newPrompt = {
-    (Get-Module oh-my-psh).SessionState | % $oldPrompt
-    if (Get-TerraformDirectory) {
-        $res = (terraform workspace show)
-        Write-Host " (TWS: $($res))  "
-    }
-}
-Set-Item -Path Function:prompt $newPrompt
-
-New-Alias which get-command
-
-New-Alias e explorer
-
-New-Alias k kubectl
-New-Alias d docker
-New-Alias dc docker-compose
-New-Alias t terraform
-
-function kns([Parameter(ValueFromRemainingArguments = $true)]$params) { & kubectl config set-context --current --namespace=$params }
-function kd([Parameter(ValueFromRemainingArguments = $true)]$params) { & kubectl describe $params }
-function krm([Parameter(ValueFromRemainingArguments = $true)]$params) { & kubectl delete $params }
-function kgns([Parameter(ValueFromRemainingArguments = $true)]$params) { & kubectl get namespaces $params }
-
-function di([Parameter(ValueFromRemainingArguments = $true)]$params) { & docker images $params }
-function drf([Parameter(ValueFromRemainingArguments = $true)]$params) { & docker rm -f @(d ps -a -q) $params }
-
-New-Alias c choco
-function co() { & choco outdated }
-function cu() { & choco upgrade all }
-
-Function Get-Something {
-    [CmdletBinding()]
-    Param([Parameter(ValueFromPipeline)]$item)
-
-    Write-Host "You passed the parameter $item into the function"
-}
 
 Function base64 {
     Param(
@@ -646,45 +549,7 @@ Function  debase64 {
     return $decoded
 }
 
-Function update-dockerfiles {
-    param (
-        [Parameter(Mandatory = $true )][string]$solution
-    )
-
-    if (!(Test-Path $solution)) {
-        Write-Error "`'$solution`' was not found"
-        return
-    }
-
-    $slnItem = Get-Item $solution
-
-    $dirs = @()
-    $output = "COPY Directory.Build.props .`n"
-    $output += "COPY `"$($slnItem.Name)`" `"$($slnItem.Name)`"" + "`n"
-    Select-String -Path $solution -Pattern ', "(.*?\.csproj)"' | ForEach-Object {
-        $_.Matches.Groups[1].Value | Sort-Object | ForEach-Object {
-            $dirs += (Get-Item ($slnItem.Directory.FullName + "\" + $_) | Split-Path)
-        }
-        $_.Matches.Groups[1].Value.Replace("\", "/") | Sort-Object | ForEach-Object {    
-            $output += "COPY `"$_`" `"$_`"`n"
-        }  
-    }
-    Select-String -Path $solution -Pattern ', "(.*?\.dcproj)"' | ForEach-Object {
-        $_.Matches.Groups[1].Value.Replace("\", "/") | Sort-Object | ForEach-Object {
-            $output += "COPY `"$_`" `"$_`"`n"
-        }  
-    }
-
-    $output += "RUN dotnet restore `"$($slnItem.Name)`""
-
-    $dirs | ForEach-Object {
-        $dockerfiles = Get-ChildItem -Path $_ -Filter "Dockerfile"
-        foreach ($file in $dockerfiles) {
-            Write-Output -Verbose "Updating $($file.FullName)"
-            $content = (Get-Content $file) -join "`n"
-            $newContent = $content -replace "(?ms)### START RESTORE ###(.*)### END RESTORE ###", "### START RESTORE ###`n$($output)`n### END RESTORE ###"
-            $newContent | Set-Content $file
-        }
-    }
+Function guid {
+    $guid = [System.Guid]::NewGuid()
+    return $guid.ToString("D")
 }
-#>
