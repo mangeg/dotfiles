@@ -12,7 +12,6 @@ if (-not (Test-Path Env:\OMP_THEME)) {
 
 oh-my-posh --init --shell pwsh --config $env:OMP_THEME | Invoke-Expression
 $env:POSH_GIT_ENABLED = $true
-$env:POSH_AZURE_ENABLED = $true
 
 Import-Module -Name PSReadLine
 Import-Module -Name Terminal-Icons
