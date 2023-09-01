@@ -4,8 +4,8 @@ version: 2
 var:
   test: value
   yellow: "#ffc524"
-  bg: "#3f3f3f"
-  fg: "#34b6dc"
+  bg: "#012b4d"
+  fg: "#00cdcc"
 blocks:
   - type: prompt
     newline: false
@@ -39,8 +39,8 @@ blocks:
           style: agnoster_short
           max_depth: 3
           mapped_locations: 
-            "d:/dev": "󰀻 "
-            "d:/dev/repos/": " "
+            "d:/": "󰀻 "
+            "d:/repos/": " "
 
       - type: dotnet
         style: diamond
@@ -105,7 +105,7 @@ blocks:
         properties:
           time_format: "15:04:05"
         template: "  {{ .CurrentDate | date .Format }} "
-      
+
       - type: sysinfo
         style: diamond
         background_templates: [ "{{ .Var.bg }}" ]
