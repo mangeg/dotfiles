@@ -1,6 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
 final_space: true
 version: 2
+auto_upgrade: false
 var:
   test: value
   yellow: "#ffc524"
@@ -53,15 +54,15 @@ blocks:
           display_mode: context
         template: " 󰪮 {{ if .Unsupported }}{{ else }}{{ .Full }}{{ end }} "
 
-      - type: gitversion
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "#c7c275" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        properties:
-          cache_timeout: 1
-        template: "  {{with .FullSemVer }}{{ . }}{{end}} "
+      # - type: gitversion
+      #   style: diamond
+      #   background_templates: [ "{{ .Var.bg }}" ]
+      #   foreground_templates: [ "#c7c275" ]
+      #   leading_diamond: "<transparent></>"
+      #   trailing_diamond: ""
+      #   properties:
+      #     cache_timeout: 1
+      #   template: "  {{with .FullSemVer }}{{ . }}{{end}} "
 
       - type: executiontime
         style: diamond
@@ -101,17 +102,9 @@ blocks:
         background_templates: [ "{{ .Var.bg }}" ]
         foreground_templates: [ "{{ .Var.fg }}" ]
         leading_diamond: 
-        trailing_diamond: "<transparent></>"
         properties:
           time_format: "15:04:05"
         template: "  {{ .CurrentDate | date .Format }} "
-
-      - type: sysinfo
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: 
-        template: " : {{ (div ((sub .PhysicalTotalMemory .PhysicalFreeMemory)|float64) 1000000000.0) }}/{{ (div .PhysicalTotalMemory 1068786176.0) }}GB {{ round .PhysicalPercentUsed .Precision }}% "
 
   - type: prompt
     alignment: left
