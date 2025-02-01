@@ -1,160 +1,185 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
-final_space: true
-version: 2
+
 var:
-  test: value
-  yellow: "#ffc524"
   bg: "#3f3f3f"
   fg: "#34b6dc"
-blocks:
-  - type: prompt
-    newline: false
-    alignment: left
-    segments:
-      - type: os
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        trailing_diamond: ""
-        template: " {{.Icon}} {{ if .WSL }}WSL {{ end }}"
-      
-      - type: shell
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        template: "  {{ .Name }}-{{ .Version }} "
-      
-      - type: path
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.yellow }}" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        template: " {{ .Path }} "
-        properties:
-          folder_icon: "󰇘"
-          home_icon: " "
-          style: agnoster_short
-          max_depth: 3
-          mapped_locations: 
-            "d:/dev": "󰀻 "
-            "d:/dev/repos/": " "
-
-      - type: dotnet
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "#ed4ee3" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        properties:
-          fetch_version: true
-          display_mode: context
-        template: " 󰪮 {{ if .Unsupported }}{{ else }}{{ .Full }}{{ end }} "
-
-      - type: gitversion
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "#c7c275" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        properties:
-          cache_timeout: 1
-        template: "  {{with .FullSemVer }}{{ . }}{{end}} "
-
-      - type: executiontime
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: "<transparent></>"
-        trailing_diamond: ""
-        properties:
-          threshold: 200
-        template: " 󰔟 {{ .FormattedMs }} "
-
-  - type: prompt
-    alignment: right
-    newline: false
-    segments:
-      - type: kubectl
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: 
-        trailing_diamond: "<transparent></>"
-        properties:
-          display_error: false
-          parse_kubeconfig: true
-        template: " <#316ce6>󱃾</> {{.Context}}{{if .Namespace}}::{{.Namespace}}{{end}} "
-
-      - type: az
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: 
-        trailing_diamond: "<transparent></>"
-        template: " <#50e6ff>󰠅</> {{ .Name }} "
-
-      - type: time
-        style: diamond
-        background_templates: [ "{{ .Var.bg }}" ]
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        leading_diamond: 
-        properties:
-          time_format: "15:04:05"
-        template: "  {{ .CurrentDate | date .Format }} "
-
-  - type: prompt
-    alignment: left
-    newline: true
-    segments:
-      - type: git
-        style: plain
-        foreground_templates:
-          - "{{ if or (.Working.Changed) (.Staging.Changed) }}#FF9248{{ end }}"
-          - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#ff4500{{ end }}"
-          - "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
-          - "{{ if gt .Behind 0 }}#B388FF{{ end }}"
-          - "#8ee06c"
-        properties:
-          fetch_status: true
-          fetch_stash_count: true
-          fetch_worktree_count: true
-          fetch_upstream_icon: true
-          fetch_bare_info: true
-          fetch_user: true
-          no_commits_icon: 󰂕
-        templates:
-          - "<{{ .Var.fg }}>[</>"
-          - "<#ff8080>{{ .User.Email }}</> "
-          - "{{ .UpstreamIcon }}"
-          - "{{ if (not (matchP (\"origin/\") (.Upstream))) }}{{ .Upstream }}{{end}}"
-          - " {{ .HEAD }}"
-          - " {{ .BranchStatus }}"
-          - "{{ if .Working.Changed }}  <#787ada>{{ .Working.String }}</>{{ end }}"
-          - "{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}"
-          - "{{ if .Staging.Changed }}  <#00ffff>{{ .Staging.String }}</>{{ end }}"
-          - "{{ if gt .StashCount 0 }} {{ .StashCount }}{{ end }}"
-          - "{{ if gt .WorktreeCount 0}}{{ .WorktreeCount }}{{ end }}"
-          - "<{{ .Var.fg }}>]</>"
-
-      - type: root
-        style: plain
-        foreground: "#ff8080"
-        properties:
-          always_enabled: true
-          root_icon: 
-        template: " "
-
-      - type: status
-        style: plain
-        foreground: "#ff8080"
-        template: "  "
-      
-      - type: text
-        style: plain
-        foreground_templates: [ "{{ .Var.fg }}" ]
-        template: ""
-
+  test: value
+  yellow: "#ffc524"
 console_title_template: "{{if .Root}}root :: {{end}}{{.Folder}}"
+blocks:
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+    trailing_diamond: 
+    template: " {{.Icon}} {{ if .WSL }}WSL {{ end }}"
+    type: os
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+    leading_diamond: <transparent></>
+    trailing_diamond: 
+    template: " \uea85 {{ .Name }}-{{ .Version }} "
+    type: shell
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+      folder_icon: 󰇘
+      home_icon: "\uf015 "
+      mapped_locations:
+        d:/dev: "\U000f003b "
+        d:/dev/repos/: "\ue5fb "
+      max_depth: 3
+      style: agnoster_short
+    leading_diamond: <transparent></>
+    trailing_diamond: 
+    template: " {{ .Path }} "
+    type: path
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.yellow }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+      display_mode: context
+      fetch_version: true
+    leading_diamond: <transparent></>
+    trailing_diamond: 
+    template: " \U000f0aae {{ if .Unsupported }}\uf071{{ else }}{{ .Full }}{{ end }} "
+    type: dotnet
+    style: diamond
+    foreground_templates:
+    - "#ed4ee3"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+    cache:
+      duration: 1m0s
+      strategy: folder
+    leading_diamond: <transparent></>
+    trailing_diamond: 
+    template: " \uea66 {{with .FullSemVer }}{{ . }}{{end}} "
+    type: gitversion
+    style: diamond
+    foreground_templates:
+    - "#c7c275"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+      threshold: 200
+    leading_diamond: <transparent></>
+    trailing_diamond: 
+    template: " \U000f051f {{ .FormattedMs }} "
+    type: executiontime
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+- type: prompt
+  alignment: right
+  segments:
+  - properties:
+      cache_duration: none
+      display_error: false
+      parse_kubeconfig: true
+    leading_diamond: 
+    trailing_diamond: <transparent></>
+    template: " <#316ce6>\U000f10fe</> {{.Context}}{{if .Namespace}}::{{.Namespace}}{{end}} "
+    type: kubectl
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+    leading_diamond: 
+    trailing_diamond: <transparent></>
+    template: " <#50e6ff>\U000f0805</> {{ .Name }} "
+    type: az
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+  - properties:
+      cache_duration: none
+      time_format: "15:04:05"
+    leading_diamond: 
+    template: " \ue384 {{ .CurrentDate | date .Format }} "
+    type: time
+    style: diamond
+    foreground_templates:
+    - "{{ .Var.fg }}"
+    background_templates:
+    - "{{ .Var.bg }}"
+- type: prompt
+  alignment: left
+  segments:
+  - properties:
+      cache_duration: none
+      fetch_bare_info: true
+      fetch_stash_count: true
+      fetch_status: true
+      fetch_upstream_icon: true
+      fetch_user: true
+      fetch_worktree_count: true
+      no_commits_icon: 󰂕
+    type: git
+    style: plain
+    foreground_templates:
+    - "{{ if or (.Working.Changed) (.Staging.Changed) }}#FF9248{{ end }}"
+    - "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#ff4500{{ end }}"
+    - "{{ if gt .Ahead 0 }}#B388FF{{ end }}"
+    - "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+    - "#8ee06c"
+    templates:
+    - <{{ .Var.fg }}>[</>
+    - "<#ff8080>{{ .User.Email }}</> "
+    - "{{ .UpstreamIcon }}"
+    - "{{ if (not (matchP (\"origin/\") (.Upstream))) }}{{ .Upstream }}{{end}}"
+    - " {{ .HEAD }}"
+    - " {{ .BranchStatus }}"
+    - "{{ if .Working.Changed }} \uf044 <#787ada>{{ .Working.String }}</>{{ end }}"
+    - "{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}"
+    - "{{ if .Staging.Changed }} \uf046 <#00ffff>{{ .Staging.String }}</>{{ end }}"
+    - "{{ if gt .StashCount 0 }}\ueb4b {{ .StashCount }}{{ end }}"
+    - "{{ if gt .WorktreeCount 0}}\uf1bb{{ .WorktreeCount }}{{ end }}"
+    - <{{ .Var.fg }}>]</>
+  - properties:
+      always_enabled: true
+      cache_duration: none
+      root_icon: 
+    template: "\uf0e7 "
+    foreground: "#ff8080"
+    type: root
+    style: plain
+  - properties:
+      cache_duration: none
+    template: " \uf057 "
+    foreground: "#ff8080"
+    type: status
+    style: plain
+  - properties:
+      cache_duration: none
+    template: 
+    type: text
+    style: plain
+    foreground_templates:
+    - "{{ .Var.fg }}"
+  newline: true
+version: 3
+final_space: true
