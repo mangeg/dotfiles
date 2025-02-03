@@ -31,8 +31,9 @@ blocks:
       folder_icon: 󰇘
       home_icon: "\uf015 "
       mapped_locations:
-        d:/dev: "\U000f003b "
-        d:/dev/repos/: "\ue5fb "
+        d:/repos: "󰀻 "
+        d:/dev: "󰀻 "
+        d:/dev/repos/: " "
       max_depth: 3
       style: agnoster_short
     leading_diamond: <transparent></>
